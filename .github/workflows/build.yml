@@ -37,6 +37,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
       - name: Build with Maven
+        run: mvn  package --file hero-service/pom.xml
+        
+      - name: step 4 show resultat
+        run: ls -a
+        
+      - name: step 5 run test
+        run: mvn -f app/pom.xml test
+        
+      - name: docker images build
         run: |
           docker build -f hero-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/hero-service:${{ env.BUILD_IMAGE_TAG }} hero-service/
       - name: docker push
