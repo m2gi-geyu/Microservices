@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: villain-config
+data:
+  database: "jdbc:postgresql://villain-database:5432/villain"
