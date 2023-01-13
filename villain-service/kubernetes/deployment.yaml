@@ -2,67 +2,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: villain-service
+  name: villain-service-monolith
   labels:
-    app: villain-service
+    app: villain-service-monolith
 spec:
   replicas: 1
   strategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: villain-service
+      app: villain-service-monolith
   template:
     metadata:
       labels:
-        app: villain-service
+        app: villain-service-monolith
     spec:
       containers:
-      - name: villain-service
-        image: workshop/villain-service-jvm
+      - name: villain-service-monolith
+        image: workshop/villain-service:latest
         ports:
         - name: http
           containerPort: 8080
         imagePullPolicy: IfNotPresent
-
         env:
-        - name: QUARKUS_DATASOURCE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: supes-config
-              key: database
-        - name: QUARKUS_DATASOURCE_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: supes-database-secret
-              key: username
-        - name: QUARKUS_DATASOURCE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: supes-database-secret
-              key: password
-
-        livenessProbe:
-          failureThreshold: 1
-          httpGet:
-            path: /q/health/live
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 0
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 2
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /q/health/ready
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 0
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 10
-
-
-
-       
+          - name: QUARKUS_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: villain-service-config
+                key: database
+          - name: QUARKUS_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: villain-service-database-secret
+                key: username
+          - name: QUARKUS_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: villain-service-database-secret
+                key: password
