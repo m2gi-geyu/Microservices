@@ -1,2 +1,4 @@
-fight-service/target/
-hero-service/target/
+target/
+.classpath
+.project
+.settings/
