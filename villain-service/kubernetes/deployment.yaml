@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: villain-service-monolith
+  name: villain-service
   labels:
-    app: villain-service-monolith
+    app: villain-service
 spec:
   replicas: 1
   strategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: villain-service-monolith
+      app: villain-service
   template:
     metadata:
       labels:
-        app: villain-service-monolith
+        app: villain-service
     spec:
       containers:
-      - name: villain-service-monolith
+      - name: villain-service
         image: workshop/villain-service:latest
         ports:
         - name: http
@@ -28,15 +28,15 @@ spec:
           - name: QUARKUS_DATASOURCE_URL
             valueFrom:
               configMapKeyRef:
-                name: villain-service-config
+                name: villain-config
                 key: database
           - name: QUARKUS_DATASOURCE_USERNAME
             valueFrom:
               secretKeyRef:
-                name: villain-service-database-secret
+                name: villain-database-secret
                 key: username
           - name: QUARKUS_DATASOURCE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: villain-service-database-secret
+                name: villain-database-secret
                 key: password

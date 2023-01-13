@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hero-postgre
+  name: hero-postgres
 spec:
   selector:
     matchLabels:

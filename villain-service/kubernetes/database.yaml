@@ -6,11 +6,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: villain-service-database
+      app: villain-database
   template:
     metadata:
       labels:
-        app: villain-service-database
+        app: villain-database
     spec:
       containers:
         - name: postgres
@@ -19,19 +19,19 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: villain-service
+              value: villain
             - name: POSTGRES_USER
-              value: villain-service
+              value: villain
             - name: POSTGRES_PASSWORD
-              value: villain-service
+              value: villain
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: villain-service-database
+  name: villain-database
 spec:
   ports:
     - port: 5432
   selector:
-    app: villain-service-database
+    app: villain-database
