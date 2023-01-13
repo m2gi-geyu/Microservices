@@ -41,6 +41,6 @@ jobs:
           docker build -f hero-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/hero-service:${{ env.BUILD_IMAGE_TAG }} hero-service/
       - name: docker push
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/hero-service
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/hero-service:${{ env.BUILD_IMAGE_TAG }}
 
     
