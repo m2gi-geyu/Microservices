@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: hero-database
+  template:
+    metadata:
+      labels:
+        app: hero-database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: hero
+            - name: POSTGRES_USER
+              value: hero
+            - name: POSTGRES_PASSWORD
+              value: hero
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hero-database
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: hero-database
