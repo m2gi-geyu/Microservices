@@ -43,7 +43,7 @@ jobs:
         run: ls -a
         
       - name: step 5 run test
-        run: mvn -f app/pom.xml test
+        run: mvn -f --file hero-service/pom.xml test
         
       - name: docker images build
         run: |
