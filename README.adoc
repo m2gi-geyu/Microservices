@@ -1,0 +1,126 @@
+= Microservices
+
+In this chapter, you will decompose a (small) monolith running in Kubernetes into a set of microservices.
+
+IMPORTANT: Make sure your Docker is using the minikube Docker socket.
+Run 'eval $(minikube docker-env)' to configure Docker correctly.
+
+== The monolith
+
+In the `supes-monolith` directory, you have the code of a small monolithic application.
+This application uses a PostgreSQL database to store _heroes_ and _villains_.
+The application exposes a simple UI (`src/main/resources/META-INF/resources/index.html`).
+It _simulates_ fights between super-heroes and super-villains.
+
+All the code is located in a single module.
+Build the monolith using:
+
+[source, bash]
+----
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t workshop/supes-monolith .
+----
+
+== Deploying the monolith
+
+As said above, the monolith uses a database.
+It is also configured using a config map (database URL) and a secret (database credentials).
+You can find all the descriptor in `supes-monolith/kubernetes`
+
+Deploy the monolith launching from the `super-monolith` directory:
+
+[source, bash]
+----
+kubectl apply -f kubernetes/
+----
+
+[NOTE]
+====
+The all-in-one update command is:
+[source, bash]
+----
+mvn package; docker build -f src/main/docker/Dockerfile.jvm -t workshop/supes-monolith .; kubectl delete deployment supes-monolith; kubectl apply -f kubernetes/
+----
+====
+
+Once deployed, access the exposed UI:
+
+[source, bash]
+----
+$ minikube service supes-monolith --url
+http://192.168.49.2:32305
+$ open http://192.168.49.2:32305 # Open the url in a browser
+----
+
+== Exercise
+
+Restructure the monolith in a set of microservices:
+
+* hero microservice
+* villain microservice
+* fight microservice (includes the UI)
+
+The decomposition must follow this set of constraints:
+
+- All communications will use HTTP.
+- Microservices must not share a database.
+- All microservices must be monitored and have health checks
+- HTTP interactions must be protected against timeout and use fallback if needed. Retries can be used.
+- Only the _fight_ service should be accessible from the outside
+
+
+== Going further (bonus points)
+
+- The code must be available on GitHub
+- Container images must be built on every commit and pushed to a container image registry (using GitHub actions)
+
+The following `.github/workflows/build.yaml` shows an example of workflow:
+
+[source, yaml]
+----
+---
+name: Continuous Integration Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+      - name: Set Image Tag
+        run: |
+          echo "BUILD_IMAGE_TAG=${GITHUB_REF_NAME}-${GITHUB_SHA}" >> $GITHUB_ENV
+      - name: Build with Maven
+        run: |
+          mvn -B clean package
+          docker build -f src/main/docker/Dockerfile.jvm -t workshop/supes-monolith .
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          tags: quay.io/cescoffier/supes-monolith:latest
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_ROBOT_TOKEN }}
+----
+
+For Docker hub use:
+
+[source, yaml]
+----
+- name: Log in to Docker Hub
+  uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+  with:
+    username: ${{ secrets.DOCKER_USERNAME }}
+    password: ${{ secrets.DOCKER_PASSWORD }}
+- name: Build with Maven
+  run: |
+     docker push <username>/supes-monolith .
+----
