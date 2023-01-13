@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: villain-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: villain-service
   ports:

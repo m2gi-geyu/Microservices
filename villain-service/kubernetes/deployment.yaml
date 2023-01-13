@@ -29,40 +29,18 @@ spec:
         - name: QUARKUS_DATASOURCE_URL
           valueFrom:
             configMapKeyRef:
-              name: supes-config
+              name: villain-config
               key: database
         - name: QUARKUS_DATASOURCE_USERNAME
           valueFrom:
             secretKeyRef:
-              name: supes-database-secret
+              name: villain-database-secret
               key: username
         - name: QUARKUS_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: supes-database-secret
+              name: villain-database-secret
               key: password
-
-        livenessProbe:
-          failureThreshold: 1
-          httpGet:
-            path: /q/health/live
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 0
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 2
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /q/health/ready
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 0
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 10
-
 
 
        

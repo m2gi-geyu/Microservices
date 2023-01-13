@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: villain-postgres
+spec:
+  selector:
+    matchLabels:
+      app: villain-database
+  template:
+    metadata:
+      labels:
+        app: villain-database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.5
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: villain
+            - name: POSTGRES_USER
+              value: villain
+            - name: POSTGRES_PASSWORD
+              value: villain
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: villain-database
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: villain-database
