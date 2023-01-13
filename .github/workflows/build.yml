@@ -38,7 +38,7 @@ jobs:
           
       - name: Build with Maven
         run: |
-          docker build -f heroService/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/hero-service heroService/
+          docker build -f hero-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/hero-service hero-service/
       - name: docker push
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/hero-service
