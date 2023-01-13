@@ -6,7 +6,7 @@ metadata:
   labels:
     app: villain-service
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
   selector:
@@ -40,3 +40,24 @@ spec:
               secretKeyRef:
                 name: villain-database-secret
                 key: password
+
+        livenessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /q/health/live
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /q/health/ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 0
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
