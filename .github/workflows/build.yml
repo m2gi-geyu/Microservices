@@ -4,13 +4,13 @@
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
-# documentation.
+# documentation.  
 
 name: Continuous Integration Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "build" ]
 
 jobs:
   build:
@@ -33,12 +33,47 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          
-      - name: Build with Maven
-        run: |
-          mvn -B clean package
-          docker build -f src/main/docker/Dockerfile.jvm -t workshop/hero-service .
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    
+      #Hero service 
+      - name: Build with Maven for hero-service
+        run: mvn  package --file hero-service/pom.xml
+        
+      - name: run test for hero-service
+        run: mvn -f hero-service/pom.xml test
+        
+      - name: Build image docker for hero-service
+        run: |
+          docker build -f hero-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/hero-service:${{ env.BUILD_IMAGE_TAG }} hero-service/
+      - name: docker push
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/hero-service:${{ env.BUILD_IMAGE_TAG }}
+
+      #Villain service
+      - name: Build with Maven for villain-service
+        run: mvn  package --file villain-service/pom.xml
+        
+      - name: run test for villain-service
+        run: mvn -f villain-service/pom.xml test
+        
+      - name: Build image docker for villain-service
+        run: |
+          docker build -f villain-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/villain-service:${{ env.BUILD_IMAGE_TAG }} villain-service/
+      - name: docker push
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/villain-service:${{ env.BUILD_IMAGE_TAG }}
+
+      #Fight service
+      - name: Build with Maven for fight-service
+        run: mvn  package --file fight-service/pom.xml
+        
+      - name: run test for fight-service
+        run: mvn -f fight-service/pom.xml test
+        
+      - name: Build image docker for fight-service
+        run: |
+          docker build -f fight-service/src/main/docker/Dockerfile.jvm -t ${{ secrets.DOCKERHUB_USERNAME }}/fight-service:${{ env.BUILD_IMAGE_TAG }} fight-service/
+      - name: docker push
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/fight-service:${{ env.BUILD_IMAGE_TAG }}
