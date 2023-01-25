@@ -9,23 +9,31 @@ decompose a (small) monolith running in Kubernetes into a set of microservices.
 ## Starting Microservices
 ### Starting Minikube 
  Make sure you are in the folder
-  `cd Microservices/`
+ 
+ `$ cd Microservices/`
   
  then start minikube
-  $ `minikube start`
+ 
+ `$ minikube start`
   
  In the terminal run:
-  $ `eval $(minikube docker-env)`
-  $ `docker ps`
+ 
+ `$ eval $(minikube docker-env)
+ 
+  $ docker ps`
+  
  Make sure the daemon is enabled
  
 ### Run Microservices
  then run:
-  $ `./deploiment.sh`
+ 
+ `$ ./deploiment.sh`
+ 
  The deployment.sh file contains all the operation instructions that need to be run
 
-  Get the address of the front-end service fight-service
-  $ `minikube service fight-service --url`
+ Get the address of the front-end service fight-service
+ 
+ `$ minikube service fight-service --url`
 
  Open the obtained URL on the browser
 
