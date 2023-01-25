@@ -2,9 +2,9 @@
 decompose a (small) monolith running in Kubernetes into a set of microservices.
 
 ## 3 microservices
-* [heroService](https://github.com/m2gi-geyu/Microservices/tree/main/hero-service)
-* [villainService](https://github.com/m2gi-geyu/Microservices/tree/main/villain-service)
-* [fightService](https://github.com/m2gi-geyu/Microservices/tree/main/fight-service)
+* [hero-service](https://github.com/m2gi-geyu/Microservices/tree/main/hero-service)
+* [villain-service](https://github.com/m2gi-geyu/Microservices/tree/main/villain-service)
+* [fight-service](https://github.com/m2gi-geyu/Microservices/tree/main/fight-service)
 
 ## Starting Microservices
 
