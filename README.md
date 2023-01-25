@@ -19,7 +19,6 @@ decompose a (small) monolith running in Kubernetes into a set of microservices.
  In the terminal run:
  
  `$ eval $(minikube docker-env)
- 
   $ docker ps`
   
  Make sure the daemon is enabled
