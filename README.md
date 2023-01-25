@@ -2,24 +2,26 @@
 decompose a (small) monolith running in Kubernetes into a set of microservices.
 
 ## 3 microservices
-* [heroService]("https://github.com/m2gi-geyu/Microservices/tree/main/hero-service")
-* [villainService]("https://github.com/m2gi-geyu/Microservices/tree/main/villain-service")
-* [fightService]("https://github.com/m2gi-geyu/Microservices/tree/main/fight-service")
+* [heroService] (https://github.com/m2gi-geyu/Microservices/tree/main/hero-service)
+* [villainService] (https://github.com/m2gi-geyu/Microservices/tree/main/villain-service)
+* [fightService] (https://github.com/m2gi-geyu/Microservices/tree/main/fight-service)
 
 ## Starting Microservices
+
 ### Starting Minikube 
  Make sure you are in the folder
  
  `$ cd Microservices/`
   
- then start minikube
+ then start minikube:
  
  `$ minikube start`
   
  In the terminal run:
  
- `$ eval $(minikube docker-env)
-  $ docker ps`
+ `$ eval $(minikube docker-env)`
+  
+ `$ docker ps`
   
  Make sure the daemon is enabled
  
